@@ -1,0 +1,123 @@
+{% extends 'Basic.HTML' %}
+
+{% block title %}
+    Product
+{% endblock title %}
+    {% block content %}
+   {% load static %}
+    <link rel="stylesheet" href="{% static 'style/mycart.css' %}">
+    {% comment %} <script src="updown_quantity.js"></script> {% endcomment %}
+    <div class="container">
+        <h2> My Cart </h2>
+        <ul class="responsive-table">
+          <li class="table-header">
+            <div class="col col-1" >No</div>
+            <div class="col col-2"></div>
+            <div class="col col-2 " style="padding-right: 30px;" >Name Product</div>
+            <div class="col col-3" style="padding-right: 50px;">Price</div>
+            <div class="col col-4" style="padding-right: 50px;">Quantity</div>
+            <div class="col col-4"></div>
+          </li>
+          {% for cart in mycart %}
+          <li class="table-row">
+            <div class="col col-1" data-label="No" style=" padding-top: 15px;" id="numcount">{{ forloop.counter}}</div>
+            <div class="col col-2" data-label=""><img style="height: 100px;" src="/image/{{cart.product.picture}}" alt=""></div>
+            <div class="col col-2" data-label="Name Product" style=" padding-top: 15px;">{{cart.product.name}}</div>
+            <div class="col col-3" data-label="Price" style=" padding-top: 15px; padding-left: 50px;" id="price{{cart.product.id}}">{{cart.product.price}}</div>
+            <div class="col col-4" data-label="Quantity" style=" padding-top: 10px; padding-left: 50px;">
+                <span id="qty{{cart.product.id}}" >x{{cart.product_qty}}</span>
+            </div>
+            <div style="margin-left: 50px; padding-left: 10px;" class="col col-4" data-label="Delete" ><button class="buttondel" style="color: rgb(255, 255, 255);background-color: rgb(3, 151, 250);"><a style="text-decoration: none;color: rgb(255, 255, 255);" onclick="return confirm('Are you remove?')" href="/cartdelete/{{cart.id}}">remove</a></button></div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+<footer class="footer-distributed">
+
+          <div class="footer-right">
+            <div class="btn-container">
+                <button class="button1" onclick="return confirm('Pay proccing')">
+                  <span class="text">Buy</span>
+                  <div class="icon-container">
+                    <div class="icon icon--left">
+                      <svg>
+                        <use xlink:href="#arrow-right"></use>
+                      </svg>
+                    </div>
+                    <div class="icon icon--right">
+                      <svg>
+                        <use xlink:href="#arrow-right"></use>
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+                
+            </div>
+              <span style="margin-top: 15px; margin-left: -60px; font-family: 'Times New Roman', Times, serif; font-size: 20px; font-weight: 600; color: aliceblue;margin-right: 5px;">Total:</span>
+              <span style="margin-top: 15px;font-family: 'Times New Roman', Times, serif; font-size: 20px; font-weight: 600; color: aliceblue;" id="total-price"></span>
+            
+            </div>
+
+          <div class="footer-left">
+
+              
+          </div>
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        const totalPriceSpan = document.querySelector('#total-price');
+        let total = 0;
+
+        document.querySelectorAll('.table-row').forEach(row => {
+            const priceElement = row.querySelector('[id^="price"]'); // Select price by ID prefix
+            const quantityElement = row.querySelector('[id^="qty"]'); // Select quantity by ID prefix
+
+            if (priceElement && quantityElement) {
+                const price = parseFloat(priceElement.textContent) || 0;
+                const quantity = parseInt(quantityElement.textContent.replace('x', '')) || 0; // Remove 'x' before converting
+
+                total += price * quantity;
+            }
+        });
+
+        totalPriceSpan.textContent = total.toFixed(2);
+        });
+
+      </script>
+      </footer>
+
+{% comment %} <script>
+    var inc = document.getElementsByClassName("stepper");
+for (i = 0; i < inc.length; i++) {
+  var incI = inc[i].querySelector("input"),
+    id = incI.getAttribute("id"),
+    min = incI.getAttribute("min"),
+    max = incI.getAttribute("max"),
+    step = incI.getAttribute("step");
+  document
+    .getElementById(id)
+    .previousElementSibling.setAttribute(
+      "onclick",
+      "stepperInput('" + id + "', -" + step + ", " + min + ")"
+    ); 
+  document
+    .getElementById(id)
+    .nextElementSibling.setAttribute(
+      "onclick",
+      "stepperInput('" + id + "', " + step + ", " + max + ")"
+    ); 
+}
+function stepperInput(id, s, m) {
+  var el = document.getElementById(id);
+  if (s > 0) {
+    if (parseInt(el.value) < m) {
+      el.value = parseInt(el.value) + s;
+    }
+  } else {
+    if (parseInt(el.value) > m) {
+      el.value = parseInt(el.value) + s;
+    }
+  }
+}
+</script> {% endcomment %}
+
+{% endblock content %}

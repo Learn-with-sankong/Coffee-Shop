@@ -1,0 +1,113 @@
+{% extends 'Basic.HTML' %}
+
+{% block title %}
+    Product
+{% endblock title %}
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans|Ubuntu:500&display=swap" rel="stylesheet">  
+    
+    
+    {% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style/product.css' %}">
+    
+
+    {% comment %} <script src="{% static '' %}"></script> {% endcomment %}
+    {% comment %} <div style="position: relative; float: right; height: 50px;">
+        <a href="{% url 'mycart' %}"><svg style="width: 25px; padding-right: 20px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1"/>
+        </svg></a>
+        <span class="cart-span" id="orderSummary">{{counter}}</span>
+    </div>{% endcomment %}
+    <div  style="display: flex; gap: 20px; flex-direction: row; max-width: 990px; margin: auto; flex-wrap: wrap;"> 
+    {% for product in myproducts %}
+    
+    
+    <div class="container product_data{{product.id}}" >
+        <!-- <div class="logo-cart">
+            <img src="icon/user.png" alt="">
+            <li class="fa-solid fa-bag-shopping"></li>
+        </div> -->
+        <div class="" style="text-align: center;">
+            <img class="" src="/image/{{product.picture}}" alt="" style="height: 200px;">
+        </div>
+        <div class="info">
+            {% csrf_token %}
+            <input type="hidden" value="{{product.id}}" id="prod_id{{product.id}}" >
+            <span class="name">{{product.name}}</span>
+            <P>{{product.detail}}</P>
+            <div >
+                <img src="/image/{{product.picstar}}" alt="" style="height: 1em; width: auto;">
+            </div>
+        </div>
+        <div class="color-price">
+            <div style="display: flex; flex-direction: row; gap: 20px; margin-top: 1.2em;" >
+                <span style="font-family: 'Times New Roman', Times, serif; font-size: 1.1em; font-weight:600,">Type:</span>
+                <span style="font-family: 'Times New Roman', Times, serif; font-size: 1.1em; font-weight:600,">{{product.typeofcoffee}}</span>
+            </div>
+            <div style="font-family: 'Bahnschrift';margin-top: 1em;">
+                <label for="coffeeQty">Quantity :</label>
+                <input type="number" class="qty-input{{product.id}}" id="coffeeQty1" min="1" max="10" style="height: 1.5em; width: 10em;" value="1">
+            </div>
+            <div style="font-family: 'Bahnschrift';margin-top: 0.5em; font-size: 2em; font-weight: 700; margin-left: 70%;">
+                <span class="price-num">{{product.price}}</span>
+                
+            </div>
+        </div>
+        <div style="margin-top: 20px; display: flex;  flex-direction: row; gap: 40px; text-align: center; align-content: center;">
+            <button class="add-to-del-button">
+                <span class="add-to-del">Buy</span>
+            </button>
+            <button class="add-to-cart-button"  id="add-cart{{product.id}}">
+                <span class="add-to-cart">Add to cart</span>
+            </button>
+        </div>
+    </div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+    <script>
+    //New
+        $('#add-cart{{product.id}}').click(function(e){
+            e.preventDefault();
+            var product_id = $(this).closest('.product_data{{product.id}}').find('#prod_id{{product.id}}').val();
+            var product_qty = $(this).closest('.product_data{{product.id}}').find('.qty-input{{product.id}}').val();
+            var token = $('input[name=csrfmiddlewaretoken]').val();
+            $.ajax({
+                method: 'POST',
+                url: '{% url 'addtocart'%}',
+                data:{
+                    'product_id': product_id,
+                    'product_qty': product_qty,
+                    csrfmiddlewaretoken: token
+                    
+                },
+                success: function(response){
+                    console.log(response)
+                    alert("Product added successfully.")
+                }
+            });
+        });
+
+    //check if button pressed.
+            {% comment %} $(document).on('click', '#add-cart', function(e){
+                e.prevenDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'cart_add'%}',
+                    data:{
+                        product_id: $('#add-cart').val(),
+                        csrfmiddlewaretoken: '{{% csrf_token %}}',
+                        action: 'post'
+                    };
+                    success: function(json){
+                        console.log(json)
+                    },
+                    error: function(xhr, errmsg, err){
+
+                    }
+                });
+            }); {% endcomment %}
+    </script>
+    {% endfor %}
+</div>
+
+{% endblock content %}
