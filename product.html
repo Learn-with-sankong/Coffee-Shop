@@ -3,30 +3,16 @@
 {% block title %}
     Product
 {% endblock title %}
-    <link href="https://fonts.googleapis.com/css?family=PT+Sans|Ubuntu:500&display=swap" rel="stylesheet">  
-    
-    
+      
     {% block content %}
     {% load static %}
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans|Ubuntu:500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'style/product.css' %}">
-    
-
-    {% comment %} <script src="{% static '' %}"></script> {% endcomment %}
-    {% comment %} <div style="position: relative; float: right; height: 50px;">
-        <a href="{% url 'mycart' %}"><svg style="width: 25px; padding-right: 20px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1"/>
-        </svg></a>
-        <span class="cart-span" id="orderSummary">{{counter}}</span>
-    </div>{% endcomment %}
     <div  style="display: flex; gap: 20px; flex-direction: row; max-width: 990px; margin: auto; flex-wrap: wrap;"> 
     {% for product in myproducts %}
     
     
     <div class="container product_data{{product.id}}" >
-        <!-- <div class="logo-cart">
-            <img src="icon/user.png" alt="">
-            <li class="fa-solid fa-bag-shopping"></li>
-        </div> -->
         <div class="" style="text-align: center;">
             <img class="" src="/image/{{product.picture}}" alt="" style="height: 200px;">
         </div>
@@ -86,28 +72,7 @@
                 }
             });
         });
-
-    //check if button pressed.
-            {% comment %} $(document).on('click', '#add-cart', function(e){
-                e.prevenDefault();
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url 'cart_add'%}',
-                    data:{
-                        product_id: $('#add-cart').val(),
-                        csrfmiddlewaretoken: '{{% csrf_token %}}',
-                        action: 'post'
-                    };
-                    success: function(json){
-                        console.log(json)
-                    },
-                    error: function(xhr, errmsg, err){
-
-                    }
-                });
-            }); {% endcomment %}
     </script>
     {% endfor %}
-</div>
-
+</div
 {% endblock content %}
